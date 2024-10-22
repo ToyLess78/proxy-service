@@ -1,0 +1,16 @@
+{
+  "name": "proxy-service",
+  "version": "1.0.0",
+  "description": "proxy-service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Tetiana Bilenko",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.21.1"
+  }
+}
