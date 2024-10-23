@@ -5,7 +5,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-
 app.use(express.json());
 
 app.all("/api/*", async (req, res) => {
@@ -26,25 +25,23 @@ app.all("/api/*", async (req, res) => {
 
         res.status(response.status).send(response.data);
     } catch (error) {
-        console.error("Error with proxy request:", error.message);
-
-        if (error.response) {
-            res.status(error.response.status).send({
+        const errorHandlers = {
+            response: () => res.status(error.response.status).send({
                 error: error.response.data,
                 status: error.response.status,
                 headers: error.response.headers,
-            });
-        } else if (error.request) {
-            res.status(502).send({
+            }),
+            request: () => res.status(502).send({
                 error: "No response received from backend",
                 message: error.message,
-            });
-        } else {
-            res.status(500).send({
+            }),
+            default: () => res.status(500).send({
                 error: "Proxy server error",
                 message: error.message,
-            });
-        }
+            })
+        };
+
+        (errorHandlers[error.response ? 'response' : error.request ? 'request' : 'default'])();
     }
 });
 
