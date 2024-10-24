@@ -25,23 +25,25 @@ app.all("/api/*", async (req, res) => {
 
         res.status(response.status).send(response.data);
     } catch (error) {
-        const errorHandlers = {
-            response: () => res.status(error.response.status).send({
+        console.error("Error with proxy request:", error.message);
+
+        if (error.response) {
+            res.status(error.response.status).send({
                 error: error.response.data,
                 status: error.response.status,
                 headers: error.response.headers,
-            }),
-            request: () => res.status(502).send({
+            });
+        } else if (error.request) {
+            res.status(502).send({
                 error: "No response received from backend",
                 message: error.message,
-            }),
-            default: () => res.status(500).send({
+            });
+        } else {
+            res.status(500).send({
                 error: "Proxy server error",
                 message: error.message,
-            })
-        };
-
-        (errorHandlers[error.response ? 'response' : error.request ? 'request' : 'default'])();
+            });
+        }
     }
 });
 
