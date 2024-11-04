@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
@@ -8,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.all("/api/*", async (req, res) => {
-    const backendUrl = "http://48.209.37.8:8000/api";
+    const backendUrl = process.env.BACKEND_URL;
     const apiUrl = `${backendUrl}${req.path.replace("/api", "")}`;
 
     try {
