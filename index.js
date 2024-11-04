@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.all("/api/*", async (req, res) => {
-    const backendUrl = "http://48.209.37.8:8000";
+    const backendUrl = "http://48.209.37.8:8000/api";
     const apiUrl = `${backendUrl}${req.path.replace("/api", "")}`;
 
     try {
